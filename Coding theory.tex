@@ -6,6 +6,7 @@
 \newtheorem{Theorem}{Theorem}
 \newtheorem{Lemma}{Lemma}
 \newtheorem{Proposition}{Proposition}
+\newtheorem{Proof}{Proof}
 
 \begin{document}
 \maketitle
@@ -17,6 +18,9 @@ The field of Coding Theory deals with problem of imperfect data transmission. Wh
 There are many objectives of a code, and the major ones include detecting and correcting a greater number of errors, using less additional space and having relatively small runtime for encoding and decoding. We can illustrate these objectives by using two typical toy example codes, triple code and parity. Assume the code we are sending is a sequence of bits 0 and 1, and random number of bits will be flipped during transmission due to noise. Triple code will triple every bit and send a coded message that is three times the original size. The receiver will decode the message by taking the majority bit of each triple. Such code can correct at most 1 error in one triple, and will have encode and decode time O(n) where n is the number of bits in the original message. The other approach, parity code, will simply add one bit at the end of the sequence, which is the bit-wise XOR of all the previous bits. We can see that such code would only be able to detect one error from the original message and could not correct any errors. The encode and decode time will also be O(n) since both the encoder and decoder will go through the whole sequence to check the parity. The advantage of the parity code will be it takes O(1) space. The tradeoffs between these codes are that the first is able to detect and correct errors but takes up three times the original space. The second cannot correct any errors but takes only one additional bit of space. \\
 \section{Basic Ideas and Linear Code}
 \subsection{Some basic definitions}
+
+\noindent Here we provide some useful coding theory definitions, which are mostly summarized from \cite{book}.
+
 \begin{Definition}
 A code of block length n over an alphabet $\Sigma$ is a subset of $\Sigma ^n$. And $q$ denotes the size of alphabet $|\Sigma|$. \cite{book}
 \end{Definition}
@@ -29,9 +33,9 @@ Given a code $C \subseteq \Sigma^n$, we have that the dimension k is given by $k
 \begin{Definition}
 Rate of the code R is represented as $R=\frac{k}{n}$.
 \end{Definition}
-\noindent As stated above, we can analyze our two toy examples, as in the repetition code, $R=\frac{1}{3}$ and for the parity code $R = \frac{k}{k+1}$.
+\noindent As stated above, we can analyze our two toy examples, the triple (repetition) and parity codes.  For the triple code, $R=\frac{1}{3}$ and for the parity code, $R = \frac{k}{k+1}$.
 \begin{Definition}
-An encoding function will be denoted as $E:|C| \rightarrow \Sigma^n$. Where as the decoding function is written as $D:\Sigma^n \rightarrow |C|$.
+An encoding function will be denoted as $E:|C| \rightarrow \Sigma^n$. Whereas the decoding function is written as $D:\Sigma^n \rightarrow |C|$.
 \end{Definition}
 \subsection{Distance of a code}
 Now as we have the basic definitions settled, we can start explore how good a code can do given certain constraints. We start from the definition of distance.
@@ -55,12 +59,13 @@ As we know the definition of distance, we can explore the upper bound of number 
 \begin{equation}
 k \le n - log_q(\sum_{i=0}^{[\frac{d-1}{2}]}{n \choose i} (q-1)^i)
 \end{equation}
-To prove such bound, we need to have a definition of a Hamming ball.
+To prove such a bound, we need to have a definition of a Hamming ball.
 \begin{Definition}(Hamming ball)\end{Definition}
 \noindent For any vector $x \in [q]^n$,
 $B(x,e) = {y \in [q]^n | \bigtriangleup (x,y) \le e}$.\\
-Basically this definition describes all the vectors(words) within Hamming distance $e$ to a certain vector $x$. With this definition we can prove the theorem of Hamming bound.\\
-\textbf{Proof of Theorem 1}:\\First set $e = \frac{d-1}{2}$. Then given any two codewords in C $c_1 \neq c_2$, we have that $B(c_1,e) \cap B(c_2,e) = \emptyset$ since the sum of radius is smaller than minimum distance $d$. Then, we claim that $|B(x,e)| = \sum_{i=0}^{e} {n \choose i}(q-i)^n$. Since for any word that has distance $i$ from $x$, we can choose ${n \choose i}$ different spots to differ, and on each different spot there are $q-i$ selections.\\
+Basically this definition describes all the vectors(words) within Hamming distance $e$ of a certain vector $x$. With this definition we can prove the correctness of the Hamming bound.\\
+\begin{Proof}Proof of Hamming Bound: \end{Proof} 
+\noindent First set $e = \frac{d-1}{2}$. Then given any two codewords in C $c_1 \neq c_2$, we have that $B(c_1,e) \cap B(c_2,e) = \emptyset$ since the sum of radius is smaller than minimum distance $d$. Then, we claim that $|B(x,e)| = \sum_{i=0}^{e} {n \choose i}(q-i)^n$. Since for any word that has distance $i$ from $x$, we can choose ${n \choose i}$ different spots to differ, and on each different spot there are $q-i$ selections.\\
 Now, as we have that $\bigcup B(c,e) \subset \Sigma^n$, we will have $|\bigcup B(c,e)| \le q^n$. One the other hand, we also have $|\bigcup B(c,e)| = \sum B(c,e) = q^k* \sum_{i=0}^{e} {n \choose i}(q-i)^n$. Combining the previous results we derive that $k \le n - log_q(\sum_{i=0}^{[\frac{d-1}{2}]}{n \choose i} (q-1)^i)$.\\
 We can see that the Hamming bound is a loose bound, and very few codes can be tight bounded by it. The only non-trivial ones are called Hamming Code and Golay Code.\\
 \subsection{Linear Code}
