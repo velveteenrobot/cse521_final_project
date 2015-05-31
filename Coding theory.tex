@@ -62,7 +62,7 @@ k \le n - log_q(\sum_{i=0}^{[\frac{d-1}{2}]}{n \choose i} (q-1)^i)
 To prove such a bound, we need to have a definition of a Hamming ball.
 \begin{Definition}(Hamming ball)\end{Definition}
 \noindent For any vector $x \in [q]^n$,
-$B(x,e) = {y \in [q]^n | \bigtriangleup (x,y) \le e}$.\\
+$B(x,e) = \{y \in [q]^n | \bigtriangleup (x,y) \le e\}$.\\
 Basically this definition describes all the vectors(words) within Hamming distance $e$ of a certain vector $x$. With this definition we can prove the correctness of the Hamming bound.
 \begin{Proof}Proof of Hamming Bound: \end{Proof} 
 \noindent First set $e = \frac{d-1}{2}$. We choose this value for $e$ because that is the maximum number of errors for which a $minimum\, distance\, decoding$ will still correctly decode the transmission. More simply, if you decode a transmission by matching it to the code word that has the greatest number of matching bits, then the maximum number of errors in the transmission (for it to be decoded correctly) would have to be less than half the distance from the intended code word to the next closest code word. Otherwise, the transmission would be ``closest'' to the incorrect word. Since $d$ is the minimum distance between any two code words in the code,  $e = \frac{d-1}{2}$ gives the maximum number of errors for any transmission using that code. 
