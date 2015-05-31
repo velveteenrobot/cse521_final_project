@@ -38,20 +38,20 @@ Rate of the code R is represented as $R=\frac{k}{n}$.
 An encoding function will be denoted as $E:|C| \rightarrow \Sigma^n$. Whereas the decoding function is written as $D:\Sigma^n \rightarrow |C|$.
 \end{Definition}
 \subsection{Distance of a code}
-Now as we have the basic definitions settled, we can start explore how good a code can do given certain constraints. We start from the definition of distance.
-\begin{Definition}The Hamming distance for two different vectors u and v is given by $\bigtriangleup(u,v) = $ the number of positions u and v defer.
+Now as we have the basic definitions settled, we can start to explore how well a code can perform given certain constraints. We start from the definition of distance.
+\begin{Definition}The Hamming distance for two different vectors u and v is given by $\bigtriangleup(u,v) = $ the number of bits in which u and v differ.
 \end{Definition}
 \noindent And with the definition of the Hamming distance we can have a definition of distance of a code.
 \begin{Definition}
 The distance of a code C is given by $d = min \bigtriangleup (u,v)$ where $u \neq v$.
 \end{Definition}
-The distance of a code is an important characteristic of a code, since it implies the number of error and erasure the code could detect and correct. This relationship is given by the following proposition:
-\begin{Proposition}The following statement are equivalent for a code C:\end{Proposition}
-1.C has minimum distance $d \ge 2$.\\
-\indent 2.If d is odd, C can correct $\frac{d-1}{2}$ errors(or $\frac{d}{2}-1$ errors if even).\\
-\indent 3.C can detect $d-1$ errors.\\
-\indent 4.C can correct $d-1$ erasures.\\
-The proof for the above proposition is left in the book \cite{book}. And the result of this proposition is that we have a easier way to describe the number of errors that a code can detect or fix, just by using the simple parameter $d$. Now, as we know the definition of distance of a code, we can write a code as $(n,k,d)_\Sigma$ to represents its generalized property.
+\noindent The distance of a code is an important characteristic of a code, since it implies the number of errors and erasures the code could detect and correct. This relationship is given by the following proposition:
+\begin{Proposition}The following statements are equivalent for a code C:\end{Proposition}
+1. \quad C has minimum distance $d \ge 2$.\\
+\indent 2. \quad If d is odd, C can correct $\frac{d-1}{2}$ errors(or $\frac{d}{2}-1$ errors if even).\\
+\indent 3. \quad C can detect $d-1$ errors.\\
+\indent 4. \quad C can correct $d-1$ erasures.\\
+The proof for the above proposition is left in the book \cite{book}. And the result of this proposition is that we have an easier way to describe the number of errors that a code can detect or fix, just by using the simple parameter $d$. Now, as we know the definition of distance of a code, we can write a code as $(n,k,d)_\Sigma$ to represents this generalized property.
 \subsection{Hamming bound for codes}
 As we know the definition of distance, we can explore the upper bound of number of errors a code can fix. One of the most simple upper bound is given by
 \begin{Theorem}(Hamming bound)\end{Theorem}
