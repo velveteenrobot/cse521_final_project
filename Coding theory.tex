@@ -130,23 +130,25 @@ Take our toy example, we will have that $R(C_{3,rep}) = \frac{1}{3}$ and $R(C_\o
 
 \section{Hamming Code}
 \subsection{Hamming (7-4) code}
-Now we will start with our first non-trivial example of code, which is Hamming code. Hamming code is a family of codes which could be generalized to higher dimension, and we start from looking at one simple example from the family.\\
-Hamming(7-4) code over Binary field is a $(7,4,3)_2$ code, and it has the following Generator matrix:
+Now we will start with our first non-trivial code example, which is the family of Hamming codes. Hamming codes are a family of codes which can be generalized to higher dimensions, and we start from looking at one simple example from the family.
+
+Hamming(7-4) code is a $(7,4,3)_2$ code, and it has the following Generator matrix: \\\\
 $G = \begin{bmatrix}
 	1 & 0 & 0 & 0 & 0 & 1 & 1 \\
 	0 & 1 & 0 & 0 & 1 & 0 & 1 \\
 	0 & 0 & 1 & 0 & 1 & 1 & 0  \\
 	0 & 0 & 0 & 1 & 1 & 1 & 1 \\
-    \end{bmatrix}$.\\
-And from the generator matrix, we could find that the mapping of such code is simply 
-$C: \{x_1, x_2, x_3,x_4\} \rightarrow \{x_1,x_2,x_3,x_4, x_2\oplus x_3\oplus x_4,x_2\oplus x_3\oplus x_4,x_1\oplus x_2\oplus x_4\}$.\\
-Now we can do some simple analysis on this code. Using proposition 2, we can get that $d = 3$. And we can check with Theorem 1 that for $d=3$, the Hamming(7-4) code is tight bounded by the Hamming bound.
+    \end{bmatrix}$.\\\\
+And from the generator matrix, we can find that the mapping of this code is simply 
+$C: \{x_1, x_2, x_3,x_4\} \rightarrow \{x_1,x_2,x_3,x_4, x_2\oplus x_3\oplus x_4,x_2\oplus x_3\oplus x_4,x_1\oplus x_2\oplus x_4\}$.
+
+Now we can do some simple analysis on this code. Using Proposition 2, we can get that $d = 3$. And we can check with Theorem 1 that for $d=3$, the Hamming(7-4) code is tight bounded by the Hamming bound.
+%TODO: actually show checking this bound
 \subsection{Generalized Hamming Code - Encoding}
-The generalized hamming code is a family of $[2^r-1, 2^r-r-1,3]_q$ code(here we only talk about over the binary field $q=2$) which are all tight bounded by Hamming bound.\\
-The general algorithm of Hamming code is the following:\\\\
-1.Among $2^r-1$ symbols(number starts with 1), choose all the bits with index of 2's powers(namely 1,2,4...$2^{r-1}$) as parity bits, the other bits as message bits.\\
-2.All the parity bits, cover bits alternatively starting from itself. The parity bits with index 1 covers the bits 1,3,5,7. The parity bits with index 2 covers the bits 2-3, 6-7,10-11... The parity bits with index 4 covers the bits 4-7, 12-15,20,23... The basic pattern is the parity bits $2^i$ covers all the bits in the interval $[2^i*(2k-1), 2^i*2k )$ where k is an integer.\\
-3.For all the integer that a parity bit covers, except for itself, the parity bit simply does the addition of all those data bits, which in binary field is just the XOR of all the bits.\\\\
+The generalized Hamming Code is a family of $[2^r-1, 2^r-r-1,3]_q$ code (here we only discuss the binary version where $q=2$), which are all tight bounded by Hamming bound. The general algorithm of Hamming code is the following:\\\\
+\indent 1. \quad Among $2^r-1$ bits, choose all the bits at positions that are powers of 2 (namely 1,2,4...$2^{r-1}$) as parity bits. The other bits as message bits.\\
+\indent 2. \quad All the parity bits, cover bits alternatively starting from itself. The parity bits with index 1 covers the bits 1,3,5,7. The parity bits with index 2 covers the bits 2-3, 6-7,10-11... The parity bits with index 4 covers the bits 4-7, 12-15,20,23... The basic pattern is the parity bits $2^i$ covers all the bits in the interval $[2^i*(2k-1), 2^i*2k )$ where k is an integer.\\
+\indent 3. \quad .For all the integer that a parity bit covers, except for itself, the parity bit simply does the addition of all those data bits, which in binary field is just the XOR of all the bits.\\\\
 Now for the actually implementation, we can first map $2^r-r-1$ number of data bits to the correct position, and then for each of the parity bit, compute the addition. For the runtime analysis, we find that mapping the data bits cost $O(2^r)$ time, and since each parity bit covers roughly half of the entire vector, computing parity cost $O(r*2^{r-1})$ time. Considering the actually dimension $k$ is in $O(2^r)$, we have that the actual encoding time is $O(k \;logk)$ with respect to dimension $k$.
 \subsection{Decode}
 For the general decoding of linear codes, there are 2 basic approaches: most likelihood decode and the shortest distance decode. The most likelihood decode would return the codeword that has the biggest probability. Such method code be deduced to an integer programming problem and we will not dive deep into this method.\\
