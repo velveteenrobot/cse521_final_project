@@ -77,41 +77,48 @@ Now we will discuss a class of nicely behaved codes called linear codes. Normall
 \begin{Definition}(Linear Codes)\end{Definition}
 \noindent Let $q$ be a prime power, and $C \subseteq {0,1,2...q-1}^k$ is a linear code if it is a linear subspace of ${0,1,2...q-1}^k$. In this situation we denote the code $C$ with dimension $k$ and distance $d$ as $[n,d,k]_q$ code.
 
-Here it is easy to see that in order to be a linear subspace, all linear combinations of code words in a code must also themselves be code words. As well, the zero code word must be in the code . For the binary field ${0,1}$, we realize that the addition of two numbers in the field is equivalent to the XOR operation, and that gives a hint that the parity code will be linear.\\
-Now since the linear code is always a linear subspace, we can represent them in terms of matrices as following.
+Here it is easy to see that in order to be a linear subspace, all linear combinations of code words in a code must also themselves be code words. As well, the zero code word must be in the code . For the binary field ${0,1}$, we realize that the addition of two numbers in the field is equivalent to the XOR operation, and that gives a hint that the parity code will be linear.
+
+Now since the linear code is always a linear subspace, we can represent them in terms of matrices as we will show below.
 \begin{Definition}(Generator Matrix)\end{Definition}
-\noindent If $S \subseteq F_q^n$ is a linear subspace with dimension $k$, then there exists vectors $v_1, v_2...v_k$ such that any $x \in S$ would be represented by linear combination of $v_i$, namely $x = a_1v_1 + a_2v_2+ ... a_kv_k$ where $a_i \in F_q$. The generator matrix $G$ is a matrix such that for every $x \in S$, we have that $x = (a_1,a_2...a_n)*G$. Such matrix G will be the following:\\
+\noindent If $S \subseteq F_q^n$ is a linear subspace with dimension $k$, then there exists vectors $v_1, v_2...v_k$ such that any $x \in S$ would be represented by linear combination of $v_i$, namely $x = a_1v_1 + a_2v_2+ ... a_kv_k$ where $a_i \in F_q$. The generator matrix $G$ is a matrix such that for every $x \in S$, we have that $x = (a_1,a_2...a_n)*G$. Such matrix G will be the following: \\\\
 G =
 $\begin{bmatrix}
     \leftarrow       & v_1 & \rightarrow \\
     \leftarrow       & v_2 & \rightarrow \\
     \hdotsfor{3} \\
     \leftarrow       & v_k & \rightarrow
-\end{bmatrix}$.
-Another way to interpret this is that the linear subspace of the code C could be represented by the "row space" of the Generator matrix G.\\\\
+\end{bmatrix}$\\\\
+Another way to interpret this is that the linear subspace of the code C could be represented by the "row space" of the Generator matrix G.
+% TODO: Add some intuitive/comceptual explanation of the generator matrix?
 \begin{Definition}(Parity Check Matrix)\end{Definition}
-\noindent If $S \subseteq F_q^n$ is a linear subspace with dimension $k$, then there exist full rank (n-k)*n matrix H such that for all $x \in S$, $Hx^T = 0$. And such matrix H is called the parity check matrix for code c.\\\\
-Similar to the idea of generator matrix, the parity check matrix also has its analogous idea in linear algebra: The linear subspace represented by code C could be denoted as the "null space" of the parity check matrix H.\\\\
-Now, with the given definition above about the matrices, we can prove that the repetition code(triple) and the parity code are both linear codes, by writing down their Generator matrix.\\
-Assuming we are applying repetition code(triple) and parity on the binary field with dimension $k$. Then the generator matrix will have size $k \times 3k$ as the one below:\\
+\noindent If $S \subseteq F_q^n$ is a linear subspace with dimension $k$, then there exist full rank (n-k)*n matrix $H$ such that for all $x \in S$, $Hx^T = 0$. And such matrix $H$ is called the parity check matrix for code $C$.
+
+Similar to the idea of generator matrix, the parity check matrix also has its analogous idea in linear algebra: The linear subspace represented by code $C$ could be denoted as the ``null space'' of the parity check matrix $H$.
+
+Now we can prove that the triple (repetition) code and the parity code are both linear codes, by writing down their Generator matrices.
+
+Assuming we are applying the triple (repetition) code and parity codes to words from the binary field with dimension $k$. Then the generator matrix for triple code will have size $k \times 3k$ as the one below:\\\\
 $G_{3,rep} = \begin{bmatrix}
     1 & 1 & 1 & 0 & 0 & 0 & 0 & \dots\\
     0 & 0 & 0 & 1 & 1 & 1 & 0 & \dots \\
     \hdotsfor{8} \\
     0 & 0 & \dots & 0 & 0 & 1 & 1 & 1 \\
-\end{bmatrix}$ since after the multiplication every bit will 'assign' 3 spots in the final encoded word. \\
-Similarly, based on the same assumption, we will have that the generator for parity code is the one below with size $k \times (k+1) $:\\
+\end{bmatrix}$\\\\ 
+After the multiplication every bit will 'assign' 3 spots in the final encoded word. Similarly, based on the same assumption, we will have that the generator matrix for the parity code is the one below with size $k \times (k+1) $:\\\\
 $G_\oplus = \begin{bmatrix}
     1 & 0& 0 & \dots & 0 & 1\\
     0 & 1& 0 & \dots & 0 & 1 \\
     \hdotsfor{6} \\
     0 & 0& 0 & \dots & 1 & 1 \\
-\end{bmatrix}$. So both of our toy examples could be categorized to linear code. In fact, not just the toy example, many useful nontrivial codes are linear as linear code behave nicely for decoding.
+\end{bmatrix}$\\\\
+So both of our toy examples can be categorized as linear code. In fact, not just the toy examples, many useful non-trivial codes are linear, since linear codes behave nicely for decoding.
 \subsection{Distance of linear code}
 To generalize the distance of linear code, we need to first define the weight of a codeword.
 \begin{Definition}(Hamming weight)\end{Definition}
-\noindent Let $q \ge 2$. For any vector $v \in {1,2...q-1}^n$, we have $wt(v)$ = the number of nonzero symbols in $v$.\\
-Now with the definition of the Hamming weight, we can introduce the proposition of distance on linear codes
+\noindent Let $q \ge 2$. For any vector $v \in {1,2...q-1}^n$, we have $wt(v)$ = the number of nonzero symbols in $v$.
+
+Now with the definition of the Hamming weight, we can introduce the proposition of distance on linear codes.
 \begin{Proposition} \end{Proposition}
 \noindent For a $[n,k,d]_q$ linear code, $d =$ min $wt(c)$ for $c \neq 0$. The proof of this proposition is also in book \cite{book}, and the basic idea is to prove that the minimum weight is both the upper bound and the lower bound of the distance.
 \subsection{Family of codes}
