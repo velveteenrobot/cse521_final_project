@@ -124,7 +124,7 @@ Now with the definition of the Hamming weight, we can introduce the proposition 
 \subsection{Family of codes}
 Since the dimension of the vector that needs to be encoded varies all the time, a code should be able to generalize to arbitrary dimensions. This is true of our toy examples, the parity and repetition codes.
 \begin{Definition}(Family of codes)\end{Definition}
-\noindent $C = C_i(i \ge 1)$ is a family of codes where $C_i$ is a $[n_i,k_i,d_i]_q$ code for each $i \ge 1$. And in this case, we define the rate R of the code to be $ R(c) = \lim_{i\to\infty} \frac{k_i}{n_i}$. And the relative distance of the code to be $\delta = \lim_{i\to\infty} \frac{d_i}{n_i}$.
+\noindent $C = C_i(i \ge 1)$ is a family of codes where $C_i$ is a $[n_i,k_i,d_i]_q$ code for each $i \ge 1$. And in this case, we define the rate R of the code to be $ R(C) = \lim_{i\to\infty} \frac{k_i}{n_i}$. And the relative distance of the code to be $\delta = \lim_{i\to\infty} \frac{d_i}{n_i}$.
 
 Take our toy example, we will have that $R(C_{3,rep}) = \frac{1}{3}$ and $R(C_\oplus) = 1$. Both relative distances will be zero since $d$ is constant for either family of codes. The reason that $\delta = 0$ for $C_{3,rep}$ is that although it can correct more than one error under certain conditions, there is no guarantee that it can always correct more than one error in a transmission. As long as two errors occur in the same block, triple code would fail.
 
@@ -164,12 +164,29 @@ Suppose the original encoded message was $v$, and after sending through the chan
 
 We will assume that $e \leq \lfloor \frac{d - 1}{2} \rfloor$, otherwise the Hamming Code cannot detect the errors. Next we find all the possible error patterns with $e \leq \lfloor \frac{d - 1}{2} \rfloor$, compute all their syndromes, $ \sum_{i=0}^{t}{n \choose i} $ of them, and store them in a table to look up. Now when we have the table, for each syndrome we can look up the error $e_i$ and subtract it from the originally received message $x$ to get the code word. And once we get the correct code word, we can scan the correct message by taking all the data bits. For the runtime analysis, if we have all the syndrome stored in a table, we can easily look up the correct code word in the table in $O(1)$ time, and then use $O(k)$ time to scan all the data bits to get the message. So the expect runtime in this situation is simply $O(k)$.\\
 \subsection{Block code}
-From the syndrome method above we find that when $r$ gets bigger and bigger, although we have linear expected runtime, we still need to store a large syndrome table. Although it is not exponentially increasing, the space still gets large when $k$ increases. One way to deal with this situation is to cut the original message into small blocks, and apply the same coding strategy onto each block. That way we can reuse our small syndrome table and avoid taking up a large amount of space. For example, to send a 16-bit data message, we could cut into 4 blocks of 4-bit data messages, and apply  Hamming(7-4) on each block. Such strategy is called block code and is used a lot in practice.
+From the syndrome method above we find that when $r$ gets bigger and bigger, although we have linear expected runtime, we still need to store a large syndrome table. Although it is not exponentially increasing, the space still gets large when $k$ increases. One way to deal with this situation is to cut the original message into small blocks, and apply the same coding strategy onto each block. That way we can reuse our small syndrome table and avoid taking up a large amount of space. For example, to send a 16-bit data message, we could cut into 4 blocks of 4-bit data messages, and apply  Hamming(7-4) on each block. Such a strategy is called block code and is used a lot in practice.
 \section{Reed-Solomon Code}
 \subsection{Introduction to RS Code} 
-Reed-Solomon Code is a set of codes that has been widely used in different applications. It is very nice because it has the property that $d = n-k+1$ which maximized the distance of the code. As the Singleton Bound suggests that $d \le n-k+1$ for any code, Reed-Solomon(RS) Code is tight bounded by this inequality and hence maximized the potential to correct errors. RS Code has broad application in data transmission, bar code as well as data storage.\\
-The general idea of an RS code is the following:\\
-Consider the data message m(with dimension k), in terms of a vector\\ $\{m_1, m_2,m_3...m_k\}_q$, as a polynomial of degree $k-1$ on the field $q$. The data characters $m_1, m_2 ...m_k$ are coefficient for degree $X^0, X^1...X^{k-1}$. Now, with the above transformation, we can write the data vector as a polynomial $P = \sum_{i=0}^{k-1}m_iX^i$.\\
+Reed-Solomon (RS) codes are a set of codes that have been widely used in different applications. RS codes satisfy what is known as the Singleton Bound. We will not discuss the Singleton boundin depth here but, it basically states that the sum of the rate and the relative distance are not much bigger than one:
+
+\begin{equation}
+R + \delta \leq 1 + \frac{1}{n}
+\end{equation}
+
+\noindent This can also be stated as:
+
+\begin{equation}
+d \le n-k+1
+\end{equation}
+
+\noindent RS codes have the property that $d = n-k+1$.  RS codes have broad applications in data transmission, bar code technology and data storage technologies. The general idea of an RS code is the following:\\
+
+Consider the data message $m$ with dimension $k$, $\{m_0, m_1,m_2...m_{k-1}\}_q$. We can map this to a polynomial of degree $k-1$ on the field $q$. The data characters $m_0, m_1 ...m_{k-1}$ are coefficients of $X^0, X^1...X^{k-1}$. Now, with the above transformation, we can write the data vector as a polynomial:
+
+\begin{equation}
+ P = \sum_{i=0}^{k-1}m_iX^i
+\end{equation}
+
 Now, for encoding, we choose $\alpha_1, \alpha_2...\aleph_n$ as $n$ different evaluating points, with $k \le n \le q$, and then evaluate the polynomial at those $\alpha_i$'s, and use those values as our codewords. Namely, our codeword will be ${P(\alpha_1), P(\alpha_2) , ... ,P(\alpha_n)}$. The evaluating points $\alpha_i$ are known to both encoder and decoder in advance, and a common choice for them is to choose $F_q - \{0\}$ which would maximize the distance.\\
 Now as stated above $k \le n \le q$, since if $k >n$ then we lose data after encoding, and if $n > q$, then we have repetitions in the evaluating points which waste space. As in this case, if we use the common choice for evaluating points, RS code over binary field would be useless since both $k$ and $n$ will be one and the  mapping would clearly be identity map. And also it's easy to see that RS code works better for larger field than for extremely small ones.\\
 We can look at one example of an RS code. Suppose we are dealing with a $[4,3,2]_5$ RS code. If the message vector we are sending is ${4, 2, 1}$, then we will have our polynomial P to be $P = X^2 + 2X + 4$, and using the common choice of evaluating points, which is ${1,2,3,4}$ in this case , we will get our encoded message as ${2, 2, 4,4}$.\\
