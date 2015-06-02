@@ -189,11 +189,14 @@ Consider the data message $m$ with dimension $k$, $\{m_0, m_1,m_2...m_{k-1}\}_q$
 
 Now, for encoding, we choose $\alpha_1, \alpha_2...\alpha_n$ as $n$ different evaluating points, with $k \le n \le q$, and then evaluate the polynomial at those $\alpha_i$'s, and use those values as our codewords. Our codeword will be $\{P(\alpha_1), P(\alpha_2) , ... ,P(\alpha_n)\}$. The evaluating points $\alpha_i$ are known to both encoder and decoder in advance, and a common choice for them is to choose $F_q - \{0\}$ which would maximize the distance.
 
-Now as stated above $k \le n \le q$, since if $k >n$ then we lose data after encoding, and if $n > q$, then we have repetitions in the evaluating points which waste space. As in this case, if we use the common choice for evaluating points, RS code over binary field would be useless since both $k$ and $n$ will be one and the  mapping would clearly be identity map. And also it's easy to see that RS code works better for larger field than for extremely small ones.\\
-We can look at one example of an RS code. Suppose we are dealing with a $[4,3,2]_5$ RS code. If the message vector we are sending is ${4, 2, 1}$, then we will have our polynomial P to be $P = X^2 + 2X + 4$, and using the common choice of evaluating points, which is ${1,2,3,4}$ in this case , we will get our encoded message as ${2, 2, 4,4}$.\\
-One huge advantage that RS code has over the other codes is that it's easy for people to control the rate $R$ by adjusting the distance. By adjusting the encoded block length $k$ and the distance $d$ we can design suitable RS code in different channel environment. Comparing with Hamming code, the distance could vary on the choice of $k$ instead of fixed at a constant.
+Now as stated above $k \le n \le q$, since if $k >n$ then we lose data after encoding, and if $n > q$, then we have repetitions in the evaluating points which waste space. If we use the common choice for evaluating points, $F_q - \{0\}$, RS code over a binary field would be useless since both $k$ and $n$ will be one and the  mapping would clearly be identity mapping. Also it is easy to see that RS code works better for larger fields than for extremely small ones.
+
+We can look at one example of an RS code. Suppose we are dealing with a $[4,3,2]_5$ RS code. If the message vector we are sending is ${4, 2, 1}$, then we will have our polynomial P to be $P = X^2 + 2X + 4$, and using the common choice of evaluating points, which is ${1,2,3,4}$ in this case , we will get our encoded message as ${2, 2, 4,4}$.
+
+One huge advantage that RS code has over the other codes is that it's easy for people to control the rate $R$ by adjusting the distance. By adjusting the encoded block length $k$ and the distance $d$ we can design suitable RS codes for different transmission environments. Compared with Hamming code, the distance could vary on the choice of $k$ instead of being fixed at a constant.
 \subsection{Simple Encoding}
-The simplest encoding strategy, as presented in the Reed and Solomon's original paper, is stated as above. Furthermore, if we are using the common choice of evaluating points, we will have the following generator matrix:\\
+The simplest encoding strategy, as presented in Reed and Solomon's original paper, is stated as above. Furthermore, if we are using the common choice of evaluating points, we will have the following generator matrix:\\
+
 $G = \begin{bmatrix}
 	1 & 1 & 1 &\dots & 1 \\
 	\alpha_1 & \alpha_2 & \alpha_3 & \dots & \alpha_n \\
@@ -201,9 +204,10 @@ $G = \begin{bmatrix}
 	\hdotsfor{5} \\
 	\alpha_1^k & \alpha_2^k & \alpha_3^k & \dots & \alpha_n^k \\
     \end{bmatrix}$.\\
-Such matrix is also called the $Vandermonde$ matrix and it shows that RS code is also categorized as linear code. For the runtime analysis, we notice that all we do is evaluating polynomials, for each of the $n$ polynomials we have $k$ terms to evaluate, hence the runtime would be $O(nk)$ for this encoding method.
+
+\noindent Such a matrix is also called the $Vandermonde$ matrix and it shows that RS code is also categorized as a linear code. For the runtime analysis, we notice that all operations are just evaluating polynomials, for each of the $n$ polynomials we have $k$ terms to evaluate. Therefore the runtime would be $O(nk)$ for this encoding method.
 \subsection{A different encoder}
-Now besides the above encoding method, there's another encoder, which sends entirely different messages to the receiver. In this new encoder, after computing the polynomial $P$, instead of evaluating on different points, we multiply the polynomial by another polynomial $g(X)$ to get to power $n-1$,and send the coefficient of the new polynomial. The polynomial $g(X)$ is defined as follows:
+Now besides the above encoding method, there's another encoder, which sends entirely different messages to the receiver. In this new encoder, after computing the polynomial $P$, instead of evaluating on different points, we multiply the polynomial by another polynomial $g(X)$ to get to a new polynomial of degree $n-1$. We then send the $n$ coefficients of the new polynomial as the encoded message. The polynomial $g(X)$ is defined as follows:
 \begin{Definition}(Generator Polynomial)\end{Definition}
 \noindent The generator polynomial is defined as $g(X) = (x-\alpha)(x-\alpha^2)...(x-\alpha^{n-k})$.\\\\
 Now this $g(X)$ is known in advance to both the sender and the receiver, and using this encoding method will turn the RS code to so called BCH code, which has its own generalized decoder.
