@@ -126,7 +126,7 @@ Since the dimension of the vector that needs to be encoded varies all the time, 
 \begin{Definition}(Family of codes)\end{Definition}
 \noindent $C = C_i(i \ge 1)$ is a family of codes where $C_i$ is a $[n_i,k_i,d_i]_q$ code for each $i \ge 1$. And in this case, we define the rate R of the code to be $ R(c) = \lim_{i\to\infty} \frac{k_i}{n_i}$. And the relative distance of the code to be $\delta = \lim_{i\to\infty} \frac{d_i}{n_i}$.
 
-Take our toy example, we will have that $R(C_{3,rep}) = \frac{1}{3}$ and $R(C_\oplus) = 1$. Both relative distances will be zero since $d$ is constant for either family of codes, and $n_i$ will goes to $\infty$ as $i$ approaches $\infty$, hence $\lim_{i\to\infty} \frac{d_i}{n_i} = 0$. The reason that $\delta = 0$ for $C_{3,rep}$ is that although it can correct more than one error under certain conditions, there is no guarantee that it can always correct more than one error in a transmission. As long as two errors occur in the same block, triple code would fail.
+Take our toy example, we will have that $R(C_{3,rep}) = \frac{1}{3}$ and $R(C_\oplus) = 1$. Both relative distances will be zero since $d$ is constant for either family of codes, and $n_i$ will go to $\infty$ as $i$ approaches $\infty$, hence $\lim_{i\to\infty} \frac{d_i}{n_i} = 0$ for both examples. The reason that $\delta = 0$ for $C_{3,rep}$ is that although it can correct more than one error under certain conditions, there is no guarantee that it can always correct more than one error in a transmission. As long as two errors occur in the same block, triple code would fail.
 
 \section{Hamming Code}
 \subsection{Hamming (7-4) code}
