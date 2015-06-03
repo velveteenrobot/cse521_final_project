@@ -207,8 +207,19 @@ $G = \begin{bmatrix}
 
 \noindent Such a matrix is also called the $Vandermonde$ matrix and it shows that RS code is also categorized as a linear code. For the runtime analysis, we notice that all operations are just evaluating polynomials, for each of the $n$ polynomials we have $k$ terms to evaluate. Therefore the runtime would be $O(nk)$ for this encoding method.
 \subsection{A different encoder}
-Now besides the above encoding method, there's another encoder, which sends entirely different messages to the receiver. In this new encoder, after computing the polynomial $P$, instead of evaluating on different points, we multiply the polynomial by another polynomial $g(X)$ to get to a new polynomial of degree $n-1$. We then send the $n$ coefficients of the new polynomial as the encoded message. The polynomial $g(X)$ is defined as follows:
+Now besides the above encoding method, there's another encoder, which sends entirely different messages to the receiver. In this new encoder, after computing the polynomial $P$, instead of evaluating on different points, we multiply the polynomial by another polynomial $g(X)$ to get to a new polynomial of degree $n-1$. We then send the $n$ coefficients of the new polynomial, we will call this the message polynomial, as the encoded message. The polynomial $g(X)$ is defined as follows:
 \begin{Definition}(Generator Polynomial)\end{Definition}
 \noindent The generator polynomial is defined as $g(X) = (x-\alpha)(x-\alpha^2)...(x-\alpha^{n-k})$.\\\\
 Now this $g(X)$ is known in advance to both the sender and the receiver, and using this encoding method will turn the RS code to so called BCH code, which has its own generalized decoder.
+
+\subsection{Decoding Reed-Solomon}
+\noindent In their original paper, Reed and Solomon propose a decoding strategy. Their proposed decoder would consider subsets of $k$ symbols from the $n$ received symbols and  interpolate a possible message polynomial for each subset \cite{reed-solomon}. Whichever is the most popular message produced by the candidate polynomials would be considered to be the corrected message. Unfortunately this solution is not efficient as there are many subsets, ${n \choose k}$.
+
+For our implementation of RS, we chose to use Syndrome decoding. In the case of RS it is slightly different than for the Hamming codes. In this case, you evaluate the message polynomial at the zeroes of the generator polynomial. If the message does not contain any errors then the result should be zero because the message polynomial is a multiple of the generator polynomial. 
+
+There are techniques for handling both erasures and errors in the transmitted data. A description for how to do both is described in \cite{wikiversity}. We will focus on just correcting errors as that is the more common use case. In the real world, RS is used a lot in QR codes and QR code scanners are not always able to detect missing data anyway. An example of this would be if part of the QR code were covered. In this case, technically that data is missing, but many scanners would just interpret the covering material as being part of the code and use error correction to get the actual message.
+
+To correct errors, we first use the Berlekamp-Massey algorithm to construct the aptly-named ``error locator polynomial''. The details of the process are beyond the scope of this paper, but the important intuition is that like with the Hamming codes, the error location information can be derived from the syndrome. Full details and implementation can be found here \cite{wikiversity, other}. Once we have the error locator polynomial, we find the zeroes of this polynomial, which give the error locations. If the polynomial is linear or quadratic there are efficient ways to solve it. Otherwise, trial and error is generally used. Once you know the locations of the errors, the Forney algorithm can be used to find the correct values for those locations. This algorithm also uses information from the syndrome but is beyond the scope of this paper. Full details and implementation can be found here \cite{wikiversity, other}.
+
+
 \end{document}
