@@ -1,6 +1,9 @@
 import numpy
 import random
 import sys
+import datetime
+
+
 
 class RSError(Exception):
     pass
@@ -8,6 +11,9 @@ class RSError(Exception):
 gf_exp = [1] * 512
 gf_log = [0] * 256
 x = 1
+
+
+
 for i in range(1, 255):
     x <<= 1
     if x & 0x100:
@@ -163,10 +169,12 @@ def rs_correct_msg(msg_in, nsym):
 
 
 class RS(object):
+    total_time = 0
     def __init__(self, nsym=10):
         self.nsym = nsym
 
     def encode(self, data):
+        start = datetime.datetime.now()
         if isinstance(data, str):
             data = [ord(ch) for ch in data]
         if not isinstance(data, list):
@@ -176,9 +184,12 @@ class RS(object):
         for i in range(0, len(data), chunk_size):
             chunk = data[i:i+chunk_size]
             enc.extend(rs_encode_msg(chunk, self.nsym))
+        end = datetime.datetime.now()
+        self.total_time += (end - start).total_seconds()
         return enc
     
     def decode(self, data):
+        start = datetime.datetime.now()
         if isinstance(data, str):
             data = [ord(ch) for ch in data]
         dec = []
@@ -189,6 +200,8 @@ class RS(object):
                 # no errors, discard ECC
                 dec2 = dec2[:-self.nsym]
             dec.extend(dec2)
+        end = datetime.datetime.now()
+        self.total_time += (end - start).total_seconds()
         return dec
 
     def add_noise(self, msg, error, bit):
@@ -226,4 +239,23 @@ class RS(object):
 
             result = result + binary_array 
         return result
+
+if __name__ == '__main__':
+    length = int(raw_input('Length: '))
+    n = int(raw_input('Repetitions: '))
+    error = float(raw_input('Error percentage: '))
+    bit = int(raw_input('Bits with error: '))
+    parity_bits = int(raw_input('Parity bits: '))
+    block_length = int(raw_input('Block length: '))
+    
+    msg = [1] * length
+    rs = RS(parity_bits)
+    a = rs.binary_chunk_to_dec(msg, block_length)
+    for i in range(n):
+        b = rs.encode(a)
+        c = rs.add_noise(b, error, bit)
+        d = rs.decode(c)
+
+    print "Total time: " + str(rs.total_time/n)
+
 
