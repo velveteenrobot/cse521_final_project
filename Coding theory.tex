@@ -77,7 +77,7 @@ Now we will discuss a class of nicely behaved codes called linear codes. Normall
 \begin{Definition}(Linear Codes)\end{Definition}
 \noindent Let $q$ be a prime power, and $C \subseteq {0,1,2...q-1}^k$ is a linear code if it is a linear subspace of ${0,1,2...q-1}^k$. In this situation we denote the code $C$ with dimension $k$ and distance $d$ as $[n,d,k]_q$ code.
 
-Here it is easy to see that in order to be a linear subspace, all linear combinations of code words in a code must also themselves be code words. As well, the zero code word must be in the code . For the binary field ${0,1}$, we realize that the addition of two numbers in the field is equivalent to the XOR operation, and that gives a hint that the parity code will be linear.
+Here it is easy to see that in order to be a linear subspace, all linear combinations of code words in a code must also themselves be code words. As well, the zero code word must be in the code . For the binary field $\{0,1\}$, we realize that the addition of two numbers in the field is equivalent to the XOR operation, and that gives a hint that the parity code will be linear.
 
 Now since the linear code is always a linear subspace, we can represent them in terms of matrices as we will show below.
 \begin{Definition}(Generator Matrix)\end{Definition}
@@ -167,7 +167,7 @@ We will assume that $e \leq \lfloor \frac{d - 1}{2} \rfloor$, otherwise the Hamm
 From the syndrome method above we find that when $r$ gets bigger and bigger, although we have linear expected runtime, we still need to store a large syndrome table. Although it is not exponentially increasing, the space still gets large when $k$ increases. One way to deal with this situation is to cut the original message into small blocks, and apply the same coding strategy onto each block. That way we can reuse our small syndrome table and avoid taking up a large amount of space. For example, to send a 16-bit data message, we could cut into 4 blocks of 4-bit data messages, and apply  Hamming(7-4) on each block. Such a strategy is called block code and is used a lot in practice.
 \section{Reed-Solomon Code}
 \subsection{Introduction to RS Code} 
-Reed-Solomon (RS) codes are a set of codes that have been widely used in different applications. RS codes satisfy what is known as the Singleton Bound. We will not discuss the Singleton boundin depth here but, it basically states that the sum of the rate and the relative distance are not much bigger than one:
+Reed-Solomon (RS) codes are a set of codes that have been widely used in different applications. RS codes satisfy what is known as the Singleton Bound. We will not discuss the Singleton bound in depth here but, it basically states that the sum of the rate and the relative distance are not much bigger than one:
 
 \begin{equation}
 R + \delta \leq 1 + \frac{1}{n}
