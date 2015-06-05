@@ -221,5 +221,7 @@ There are techniques for handling both erasures and errors in the transmitted da
 
 To correct errors, we first use the Berlekamp-Massey algorithm to construct the aptly-named ``error locator polynomial''. The details of the process are beyond the scope of this paper, but the important intuition is that like with the Hamming codes, the error location information can be derived from the syndrome. Full details and implementation can be found here \cite{wikiversity, other}. Once we have the error locator polynomial, we find the zeroes of this polynomial, which give the error locations. If the polynomial is linear or quadratic there are efficient ways to solve it. Otherwise, trial and error is generally used. Once you know the locations of the errors, the Forney algorithm can be used to find the correct values for those locations. This algorithm also uses information from the syndrome but is beyond the scope of this paper. Full details and implementation can be found here \cite{wikiversity, other}.
 
+\bibliographystyle{plain}
+\bibliography{coding}
 
 \end{document}
