@@ -130,7 +130,7 @@ Take our toy example, we will have that $R(C_{3,rep}) = \frac{1}{3}$ and $R(C_\o
 
 \section{Hamming Code}
 \subsection{Hamming (7-4) code}
-Now we will start with our first non-trivial code example, which is the family of Hamming codes. Hamming codes are a family of codes which can be generalized to higher dimensions, and we start from looking at one simple example from the family.
+Now we will start with our first non-trivial code example, which is the family of Hamming codes based on the coding strategy proposed by Richard Hamming in 1950 \cite{hamming-code}. Hamming codes are a family of codes which can be generalized to higher dimensions, and we start from looking at one simple example from the family.
 
 Hamming(7-4) code is a $(7,4,3)_2$ code, and it has the following Generator matrix: \\\\
 $G = \begin{bmatrix}
@@ -167,7 +167,7 @@ We will assume that $e \leq \lfloor \frac{d - 1}{2} \rfloor$, otherwise the Hamm
 From the syndrome method above we find that when $r$ gets bigger and bigger, although we have linear expected runtime, we still need to store a large syndrome table. Although it is not exponentially increasing, the space still gets large when $k$ increases. One way to deal with this situation is to cut the original message into small blocks, and apply the same coding strategy onto each block. That way we can reuse our small syndrome table and avoid taking up a large amount of space. For example, to send a 16-bit data message, we could cut into 4 blocks of 4-bit data messages, and apply  Hamming(7-4) on each block. Such a strategy is called block code and is used a lot in practice.
 \section{Reed-Solomon Code}
 \subsection{Introduction to RS Code} 
-Reed-Solomon (RS) codes are a set of codes that have been widely used in different applications. RS codes satisfy what is known as the Singleton Bound. We will not discuss the Singleton bound in depth here but, it basically states that the sum of the rate and the relative distance are not much bigger than one:
+Reed-Solomon (RS) codes are a set of codes that have been widely used in different applications. They were introduced by Irving S. Reed and Gustave Solomon in 1960 \cite{reed-solomon}. RS codes satisfy what is known as the Singleton Bound. We will not discuss the Singleton bound in depth here but, it basically states that the sum of the rate and the relative distance are not much bigger than one \cite{singleton}:
 
 \begin{equation}
 R + \delta \leq 1 + \frac{1}{n}
