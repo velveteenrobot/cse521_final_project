@@ -8,6 +8,10 @@
 \newtheorem{Proposition}{Proposition}
 \newtheorem{Proof}{Proof}
 
+\makeatletter
+\newcommand*\nobreakhyphen{\hbox{-}\nobreak\hskip\z@skip}
+\makeatother
+
 \begin{document}
 \maketitle
 \tableofcontents
@@ -75,7 +79,7 @@ Basically this definition describes all the vectors(words) within Hamming distan
 
 We then claim that $|B(x,e)| = \sum_{i=0}^{e} {n \choose i}(q-i)^n$. Since for any word that has distance $i$ from $x$, we can choose ${n \choose i}$ different spots to differ, and on each different spot there are $q-i$ selections.
 
-Now, as we have that $\bigcup B(c,e) \subset \Sigma^n$, we will have $|\bigcup B(c,e)| \le q^n$. On the other hand, we also have $|\bigcup B(c,e)| = \sum B(c,e) = q^k* \sum_{i=0}^{e} {n \choose i}(q-i)^n$. Combining the previous results we derive that $k \le n - log_q(\sum_{i=0}^{[\frac{d-1}{2}]}{n \choose i} (q-1)^i)$. We can see that the Hamming bound is a loose bound, and very few codes can be tight bounded by it. The only non-trivial ones are called Hamming Code and Golay Code.\\
+Now, as we have that $\bigcup B(c,e) \subset \Sigma^n$, we will have $|\bigcup B(c,e)| \le q^n$. On the other hand, we also have $|\bigcup B(c,e)| = \sum B(c,e) = q^k* \sum_{i=0}^{e} {n \choose i}(q-i)^n$. Combining the previous results we derive that $k \le n - log_q(\sum_{i=0}^{[\frac{d-1}{2}]}{n \choose i} (q-1)^i)$. We can see that the Hamming bound is a loose bound, and very few codes can be tight bounded by it. The only non-trivial ones are called Hamming Codes and Golay Codes \cite{hamming-code, golay, hill}.\\
 \section{Linear Codes}
 \subsection{Inroduction to Linear Codes}
 Now we will discuss a class of nicely behaved codes called linear codes. Normally, if we have a entirely random coding strategy for a code $C:[q]^k \rightarrow [q]^n$, then for decoding purposes, we will need to store the whole code C in a dictionary, so every time the receiver receives a transmission he could look up the transmitted word in dictionary and choose the code word with the shortest distance from the word he received. The problem is that for $C:[q]^k \rightarrow [q]^n$, we have $[q]^k$ entries, and for each entry, the key occupies space $n$. Hence such a dictionary would have space performance of at least $nq^k$, which is exponential with respect to dimension $k$. We need a code with a structure such that the original word can be retrieved without storing a 1-to-1 mapping between coded and decoded words.
@@ -224,7 +228,7 @@ For our implementation of RS, we chose to use Syndrome decoding. In the case of 
 
 There are techniques for handling both erasures and errors in the transmitted data. A description for how to do both is described in \cite{wikiversity}. We will focus on just correcting errors as that is the more common use case. In the real world, RS is used a lot in QR codes and QR code scanners are not always able to detect missing data anyway. An example of this would be if part of the QR code were covered. In this case, technically that data is missing, but many scanners would just interpret the covering material as being part of the code and use error correction to get the actual message.
 
-To correct errors, we first use the Berlekamp-Massey algorithm to construct the aptly-named ``error locator polynomial''. The details of the process are beyond the scope of this paper, but the important intuition is that like with the Hamming codes, the error location information can be derived from the syndrome. Full details and implementation can be found here \cite{wikiversity}. Once we have the error locator polynomial, we find the zeroes of this polynomial, which give the error locations. If the polynomial is linear or quadratic there are efficient ways to solve it. Otherwise, trial and error is generally used. Once you know the locations of the errors, the Forney algorithm can be used to find the correct values for those locations. This algorithm also uses information from the syndrome but is beyond the scope of this paper. Full details and implementation can be found here \cite{wikiversity}.
+To correct errors, we first use the Berlekamp-Massey algorithm to construct the aptly-named ``error locator polynomial''. The details of the process are beyond the scope of this paper, but the important intuition is that like with the Hamming codes, the error location information can be derived from the syndrome \cite{berlekamp, massey}. Full details and implementation can be found here \cite{wikiversity}. Once we have the error locator polynomial, we find the zeroes of this polynomial, which give the error locations. If the polynomial is linear or quadratic there are efficient ways to solve it. Otherwise, trial and error is generally used. Once you know the locations of the errors, the Forney algorithm can be used to find the correct values for those locations \cite{forney}. This algorithm also uses information from the syndrome but is beyond the scope of this paper. Full details and implementation can be found here \cite{wikiversity}.
 
 %\subsection{Practical applications of Reed-Solomon Codes}
 %\noindent 
