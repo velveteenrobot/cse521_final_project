@@ -14,11 +14,15 @@
 \newpage
 
 \section{Introduction}
-The field of Coding Theory deals with problem of imperfect data transmission. When data is transmitted, part of the data might get corrupted, either erased or replaced by an incorrect (noise) value. The solution to such problems is to encode the data before transmission by adding some additional information, and when the receiver decodes the data, they should be able to detect the errors in the received code, and possibly have enough information to correct the data. Now it is clear that for some transmission methods, there does not exist any absolutely perfect code, as any data, including the ones added in encoding process, could be corrupted. But for well-characterized transmission methods, there might a known distribution or upper bound on data corruption, hence there should be different coding strategies to deal with different transmission methods.
+The field of Coding Theory deals with problem of imperfect data transmission. When data is transmitted, part of the data might get corrupted, either erased or replaced by an incorrect (noise) value. The solution to such problems is to encode the data before transmission by adding some additional information, and when the receiver decodes the data, they should be able to detect the errors in the received code, and possibly have enough information to correct the data. Now it is clear that for some transmission methods, there does not exist any absolutely perfect code, as any data, including the ones added in encoding process, could be corrupted. But for well-characterized transmission methods, there might be a known distribution or upper bound on data corruption, hence there should be different coding strategies to deal with different transmission methods.
 
-There are many objectives of a code, and the major ones include detecting and correcting a greater number of errors, using less additional space and having relatively small runtime for encoding and decoding. We can illustrate these objectives by using two typical toy example codes, triple code and parity. Assume the code we are sending is a sequence of bits 0 and 1, and random number of bits will be flipped during transmission due to noise. Triple code will triple every bit and send a coded message that is three times the original size. The receiver will decode the message by taking the majority bit of each triple. Such code can correct at most 1 error in one triple, and will have encode and decode time $O(n)$ where n is the number of bits in the original message. The other approach, parity code, will simply add one bit at the end of the sequence, which is the bit-wise XOR of all the previous bits. We can see that such code would only be able to detect one error from the original message and could not correct any errors. The encode and decode time will also be $O(n)$ since both the encoder and decoder will go through the whole sequence to check the parity. The advantage of the parity code will be it takes $O(1)$ space. The tradeoffs between these codes are that the first is able to detect and correct errors but takes up three times the original space. The second cannot correct any errors but takes only one additional bit of space. \\
-\section{Basic Ideas and Linear Code}
-\subsection{Some basic definitions}
+There are many objectives of a code, and the major ones include detecting and correcting a greater number of errors, using less additional space and having relatively small runtime for encoding and decoding. We can illustrate these objectives by using two typical toy example codes, triple code and parity. Assume the code we are sending is a sequence of bits 0 and 1, and random number of bits will be flipped during transmission due to noise. Triple code will triple every bit and send a coded message that is three times the original size. The receiver will decode the message by taking the majority bit of each triple. Such code can correct at most 1 error in one triple, and will have encode and decode time $O(n)$ where n is the number of bits in the original message. The other approach, parity code, will simply add one bit at the end of the sequence, which is the bit-wise XOR of all the previous bits. We can see that such code would only be able to detect one error from the original message and could not correct any errors. The encode and decode time will also be $O(n)$ since both the encoder and decoder will go through the whole sequence to check the parity. The advantage of the parity code will be it takes $O(1)$ space. The tradeoffs between these codes are that the first is able to detect and correct errors but takes up three times the original space. The second cannot correct any errors but takes only one additional bit of space.
+
+We can see that in general we might want codes that correct as many errors as possible without adding too many addtional bits to the original message. Unfortunately, it is not possible to just add one more bit and correct an arbitrary number of errors. There are well established bounds in Coding Theory that bound the relationship between the maximum number of errors that can be corrected and the minimum number of bits that must be added to the original data. Later, we will discuss the Hamming Bound, which is one such bound. 
+
+
+\section{Background}
+\subsection{Definitions}
 
 \noindent Here we provide some useful coding theory definitions, which are mostly summarized from \cite{book}.
 
@@ -38,7 +42,7 @@ Rate of the code R is represented as $R=\frac{k}{n}$.
 \begin{Definition}
 An encoding function will be denoted as $E:|C| \rightarrow \Sigma^n$. Whereas the decoding function is written as $D:\Sigma^n \rightarrow |C|$.
 \end{Definition}
-\subsection{Distance of a code}
+\subsection{Distance of a Code}
 Now as we have the basic definitions settled, we can start to explore how well a code can perform given certain constraints. We start from the definition of distance.
 \begin{Definition}The Hamming distance for two different vectors u and v is given by $\bigtriangleup(u,v) = $ the number of bits in which u and v differ.
 \end{Definition}
@@ -53,7 +57,7 @@ The distance of a code C is given by $d = min \bigtriangleup (u,v)$ where $u \ne
 \indent 3. \quad C can detect $d-1$ errors.\\
 \indent 4. \quad C can correct $d-1$ erasures.\\
 The proof for the above proposition is left in the book \cite{book}. And the result of this proposition is that we have an easier way to describe the number of errors that a code can detect or fix, just by using the simple parameter $d$. Now, as we know the definition of distance of a code, we can write a code as $(n,k,d)_\Sigma$ to represents this generalized property.
-\subsection{Hamming bound for codes}
+\subsection{Hamming Bound}
 As we know the definition of distance, we can explore the upper bound of number of errors a code can fix. One of the most simple upper bound is given by
 \begin{Theorem}(Hamming bound)\end{Theorem}
 \noindent For every $(n,k,d)_{q}$ code, we have:
@@ -73,7 +77,8 @@ Basically this definition describes all the vectors(words) within Hamming distan
 We then claim that $|B(x,e)| = \sum_{i=0}^{e} {n \choose i}(q-i)^n$. Since for any word that has distance $i$ from $x$, we can choose ${n \choose i}$ different spots to differ, and on each different spot there are $q-i$ selections.
 
 Now, as we have that $\bigcup B(c,e) \subset \Sigma^n$, we will have $|\bigcup B(c,e)| \le q^n$. On the other hand, we also have $|\bigcup B(c,e)| = \sum B(c,e) = q^k* \sum_{i=0}^{e} {n \choose i}(q-i)^n$. Combining the previous results we derive that $k \le n - log_q(\sum_{i=0}^{[\frac{d-1}{2}]}{n \choose i} (q-1)^i)$. We can see that the Hamming bound is a loose bound, and very few codes can be tight bounded by it. The only non-trivial ones are called Hamming Code and Golay Code.\\
-\subsection{Linear Codes}
+\section{Linear Codes}
+\subsection{Inroduction to Linear Codes}
 Now we will discuss a class of nicely behaved codes called linear codes. Normally, if we have a entirely random coding strategy for a code $C:[q]^k \rightarrow [q]^n$, then for decoding purposes, we will need to store the whole code C in a dictionary, so every time the receiver receives a transmission he could look up the transmitted word in dictionary and choose the code word with the shortest distance from the word he received. The problem is that for $C:[q]^k \rightarrow [q]^n$, we have $[q]^k$ entries, and for each entry, the key occupies space $n$. Hence such a dictionary would have space performance of at least $nq^k$, which is exponential with respect to dimension $k$. We need a code with a structure such that the original word can be retrieved without storing a 1-to-1 mapping between coded and decoded words.
 \begin{Definition}(Linear Codes)\end{Definition}
 \noindent Let $q$ be a prime power, and $C \subseteq {0,1,2...q-1}^k$ is a linear code if it is a linear subspace of ${0,1,2...q-1}^k$. In this situation we denote the code $C$ with dimension $k$ and distance $d$ as $[n,d,k]_q$ code.
@@ -114,7 +119,7 @@ $G_\oplus = \begin{bmatrix}
     0 & 0& 0 & \dots & 1 & 1 \\
 \end{bmatrix}$\\\\
 So both of our toy examples can be categorized as linear code. In fact, not just the toy examples, many useful non-trivial codes are linear, since linear codes behave nicely for decoding.
-\subsection{Distance of linear code}
+\subsection{Distance of Linear Codes}
 To generalize the distance of linear code, we need to first define the weight of a codeword.
 \begin{Definition}(Hamming weight)\end{Definition}
 \noindent Let $q \ge 2$. For any vector $v \in {1,2...q-1}^n$, we have $wt(v)$ = the number of nonzero symbols in $v$.
@@ -122,15 +127,15 @@ To generalize the distance of linear code, we need to first define the weight of
 Now with the definition of the Hamming weight, we can introduce the proposition of distance on linear codes.
 \begin{Proposition} \end{Proposition}
 \noindent For a $[n,k,d]_q$ linear code, $d =$ min $wt(c)$ for $c \neq 0$. The proof of this proposition is also in \cite{book}, and the basic idea is to prove that the minimum weight is both the upper bound and the lower bound of the distance.
-\subsection{Family of codes}
+\subsection{Families of Codes}
 Since the dimension of the vector that needs to be encoded varies all the time, a code should be able to generalize to arbitrary dimensions. This is true of our toy examples, the parity and repetition codes.
 \begin{Definition}(Family of codes)\end{Definition}
 \noindent $C = C_i(i \ge 1)$ is a family of codes where $C_i$ is a $[n_i,k_i,d_i]_q$ code for each $i \ge 1$. And in this case, we define the rate R of the code to be $ R(C) = \lim_{i\to\infty} \frac{k_i}{n_i}$. And the relative distance of the code to be $\delta = \lim_{i\to\infty} \frac{d_i}{n_i}$.
 
 Take our toy example, we will have that $R(C_{3,rep}) = \frac{1}{3}$ and $R(C_\oplus) = 1$. Both relative distances will be zero since $d$ is constant for either family of codes, and $n_i$ will go to $\infty$ as $i$ approaches $\infty$, hence $\lim_{i\to\infty} \frac{d_i}{n_i} = 0$ for both examples. The reason that $\delta = 0$ for $C_{3,rep}$ is that although it can correct more than one error under certain conditions, there is no guarantee that it can always correct more than one error in a transmission. As long as two errors occur in the same block, triple code would fail.
 
-\section{Hamming Code}
-\subsection{Hamming (7-4) code}
+\section{Hamming Codes}
+\subsection{Hamming (7-4) Code}
 Now we will start with our first non-trivial code example, which is the family of Hamming codes based on the coding strategy proposed by Richard Hamming in 1950 \cite{hamming-code}. Hamming codes are a family of codes which can be generalized to higher dimensions, and we start from looking at one simple example from the family.
 
 Hamming(7-4) code is a $(7,4,3)_2$ code, and it has the following Generator matrix: \\\\
@@ -145,14 +150,14 @@ $C: \{x_1, x_2, x_3,x_4\} \rightarrow \{x_1,x_2,x_3,x_4, x_2\oplus x_3\oplus x_4
 
 Now we can do some simple analysis on this code. Using Proposition 2, we can get that $d = 3$. And we can check with Theorem 1 that for $d=3$, the Hamming(7-4) code is tight bounded by the Hamming bound. Consider Hamming code always has $d=3$ and $q=2$ since it's on the binary field, applying Theorem 1 we get the bound $k \le n-log_2({n\choose 0}*1^0 + {n\choose 1}*2^1) = n-log_2(n+1)$. Now plug in the value of $k=4$ and $n = 7$, we get that $k = n-log_2(n+1)$ for this code, and hence the Hamming code is tight bounded by the Hamming bound.
 
-\subsection{Generalized Hamming Code - Encoding}
+\subsection{Encoding Generalized Hamming Codes}
 The generalized Hamming Code is a family of $[2^r-1, 2^r-r-1,3]_q$ code (here we only discuss the binary version where $q=2$), which are all tight bounded by Hamming bound. The general algorithm of Hamming code is the following:\\\\
 \indent 1. \quad Among $2^r-1$ bits, choose all the bits at positions that are powers of 2 (namely 1,2,4...$2^{r-1}$) as parity bits. The other bits are message bits.\\
 \indent 2. \quad Each of the parity bits calculate parity for a certain subset of the bits in the coded word. The parity bit with index 1 covers the bits 1,3,5,7. The parity bit with index 2 covers the bits 2-3, 6-7,10-11... The parity bits with index 4 covers the bits 4-7, 12-15,20,23... The basic pattern is that the parity bits $2^i$ covers all the bits in the interval $[2^i*(2k-1), 2^i*2k )$ where k is an integer.\\
 \indent 3. \quad For all the message bits that a parity bit covers (this excludes the parity bit itself), the parity bit is simply the addition of all those message bits, which for a binary code is just the XOR of all the message bits it covers. 
 
 For the actual implementation, we can first map $2^r-r-1$ message bits to the correct positions, and then for each of the parity bit, compute the XORs. For the runtime analysis, we find that mapping the message bits cost $O(2^r)$ time, and since each parity bit covers roughly half of the entire vector, computing parity cost $O(r*2^{r-1})$ time. Considering the actually dimension $k$ is in $O(2^r)$, we have that the actual encoding time is $O(k \;logk)$ with respect to dimension $k$.
-\subsection{Decoding}
+\subsection{Decoding Generalized Hamming Codes}
 For the general decoding of linear codes, we can consider two basic approaches, the $maximum\, likelihood\, decoder$ and the $minimum\, distance\, decoder$. The maximum likelihood decoder, as defined by \cite{decoder_citation}, returns a code word $c_1$ that maximizes $P( c_2\, received | c_1\, sent)$ for a received word $c_2$, $c_1, c_2 \in C$. This can be modeled as an integer programming problem, but due to complexity we will not consider it further. 
 
 For our second method, w henever a transmitted word is received, the minimum distance decoder returns the code word that is closest to the received word in terms of Hamming distance. Now the generalized minimum distance decoder strategy, as stated in Section 2, will need exponential space to store all the possible codewords, and hence in general this method is prohibitive and could not be used in practice.
@@ -164,10 +169,10 @@ Now, linear codes all have nice properties to facilitate fast decoding. An impor
 Suppose the original encoded message was $v$, and after sending through the channel it gets added to an error message $e$ and the receiver gets the message $x = v+e$. Then we have that $xH^T = (v+e)H^T = vH^T+eH^T = eH^T$. 
 
 We will assume that $e \leq \lfloor \frac{d - 1}{2} \rfloor$, otherwise the Hamming Code cannot detect the errors. Next we find all the possible error patterns with $e \leq \lfloor \frac{d - 1}{2} \rfloor$, compute all their syndromes, $ \sum_{i=0}^{t}{n \choose i} $ of them, and store them in a table to look up. Now when we have the table, for each syndrome we can look up the error $e_i$ and subtract it from the originally received message $x$ to get the code word. And once we get the correct code word, we can scan the correct message by taking all the data bits. For the runtime analysis, if we have all the syndrome stored in a table, we can easily look up the correct code word in the table in $O(1)$ time, and then use $O(k)$ time to scan all the data bits to get the message. So the expect runtime in this situation is simply $O(k)$.\\
-\subsection{Block code}
+\subsection{Block Code}
 From the syndrome method above we find that when $r$ gets bigger and bigger, although we have linear expected runtime, we still need to store a large syndrome table. Although it is not exponentially increasing, the space still gets large when $k$ increases. One way to deal with this situation is to cut the original message into small blocks, and apply the same coding strategy onto each block. That way we can reuse our small syndrome table and avoid taking up a large amount of space. For example, to send a 16-bit data message, we could cut into 4 blocks of 4-bit data messages, and apply  Hamming(7-4) on each block. Such a strategy is called block code and is used a lot in practice.
-\section{Reed-Solomon Code}
-\subsection{Introduction to RS Code} 
+\section{Reed-Solomon Codes}
+\subsection{Introduction to Reed-Solomon Codes} 
 Reed-Solomon (RS) codes are a set of codes that have been widely used in different applications. They were introduced by Irving S. Reed and Gustave Solomon in 1960 \cite{reed-solomon}. RS codes satisfy what is known as the Singleton Bound. We will not discuss the Singleton bound in depth here but, it basically states that the sum of the rate and the relative distance are not much bigger than one \cite{singleton}:
 
 \begin{equation}
@@ -207,7 +212,7 @@ $G = \begin{bmatrix}
     \end{bmatrix}$.\\
 
 \noindent Such a matrix is also called the $Vandermonde$ matrix and it shows that RS code is also categorized as a linear code. For the runtime analysis, we notice that all operations are just evaluating polynomials, for each of the $n$ polynomials we have $k$ terms to evaluate. Therefore the runtime would be $O(nk)$ for this encoding method.
-\subsection{A different encoder}
+\subsection{A Different Encoder}
 Now besides the above encoding method, there's another encoder, which sends entirely different messages to the receiver. In this new encoder, after computing the polynomial $P$, instead of evaluating on different points, we multiply the polynomial by another polynomial $g(X)$ to get to a new polynomial of degree $n-1$. We then send the $n$ coefficients of the new polynomial, we will call this the message polynomial, as the encoded message. The polynomial $g(X)$ is defined as follows:
 \begin{Definition}(Generator Polynomial)\end{Definition}
 \noindent The generator polynomial is defined as $g(X) = (x-\alpha)(x-\alpha^2)...(x-\alpha^{n-k})$.\\\\
