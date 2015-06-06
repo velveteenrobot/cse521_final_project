@@ -56,6 +56,7 @@ def correct(noisy, n):
     return noisy
  
 def hamming(length, n, error, bit, block_length):
+    total = 0
     start = datetime.datetime.now()
     g =  numpy.array([[1, 0, 0, 0, 0, 1, 1],[0, 1, 0, 0, 1, 0, 1],[0, 0, 1, 0, 1, 1, 0],[0, 0, 0, 1, 1, 1, 1]])
     h = numpy.array([[0, 0, 0, 1, 1, 1, 1],[0, 1, 1, 0, 0, 1, 1],[1, 0, 1, 0, 1, 0, 1],])
@@ -70,8 +71,11 @@ def hamming(length, n, error, bit, block_length):
             enc = encode(msg_chunk, g)
             #print "original message chunk: ", msg_chunk
             #print "encoded msg: ", enc
+            end = datetime.datetime.now()
+            total += (end - start).total_seconds()
             noisy = noise(enc, error, bit)
             #print 'noisy mesage: ', noisy
+            start = datetime.datetime.now()
             syndrome = get_syndrome(noisy, h)
             #print 'syndrome: ', syndrome
             error_bit = get_error(syndrome)
